@@ -13,3 +13,7 @@ user_model= api.model('User', {
     "email": fields.String(required=True, description="The email"),
     "role": fields.String(required=True, description="The role")
     })
+login_model = api.model('Login', {
+    "username": fields.String(required=True, description="The username"),
+    "password": fields.String(required=True, description="The password")
+    })
