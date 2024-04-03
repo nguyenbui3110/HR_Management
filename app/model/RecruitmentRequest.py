@@ -1,22 +1,25 @@
 from sqlalchemy import Column, Integer, String,Date,Text
 from app.extensions import db, ma
+
 class RecruitmentRequest(db.Model):
     __tablename__ = 'recruitmentRequest'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    position = Column(String(255), nullable=False)
-    jobDescription = Column(Text, nullable=True)
-    city = Column(String(255), nullable=False)
-    department = Column(String(255), nullable=False)
-    recruitmentType = Column(String(50), nullable=False)
-    jobDuties = Column(Text, nullable=False)
-    requiredQualifications = Column(Text, nullable=True)
-    salaryAndBenefit = Column(Text, nullable=False)
-    expectedStartDate = Column(Date, nullable=False)
-    headCount = Column(Integer, nullable=False)
-    requesterId = Column(Integer, db.ForeignKey('users.id'), nullable=False)
-    hrId = Column(Integer, db.ForeignKey('users.id'), nullable=False)
-    status = Column(String(50), nullable=False)#enum
-    recruitmentProgressId = Column(String(50), nullable=False)
+    Id = Column(Integer, primary_key=True, autoincrement=True)
+    Position = Column(String(255), nullable=True)
+    JobDescription = Column(Text, nullable=True)
+    City = Column(String(255), nullable=True)
+    Department = Column(String(255), nullable=True)
+    RecruitmentType = Column(String(50), nullable=True)
+    JobDuties = Column(Text, nullable=True)
+    RequiredQualifications = Column(Text, nullable=True)
+    SalaryAndBenefit = Column(Text, nullable=True)
+    ExpectedStartDate = Column(Date, nullable=True)
+    HeadCount = Column(Integer, nullable=True)
+    RequesterId = Column(Integer, db.ForeignKey('users.Id'))
+    Requester = db.relationship('User', foreign_keys=[RequesterId], back_populates='Requests', lazy=True)
+    AssigneeId = Column(Integer, db.ForeignKey('users.Id'))
+    Assignee  = db.relationship('User', foreign_keys=[AssigneeId],back_populates='Assigns', lazy=True)
+    Status = Column(String(50), nullable=True)#enum
+    RecruitmentProgressId = Column(String(50), nullable=True)
 
     def __init__(self, position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, hrId, status, recruitmentProgressId):
         self.position = position

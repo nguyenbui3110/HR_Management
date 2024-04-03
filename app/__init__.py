@@ -5,7 +5,7 @@ from .controllers.RecruitmentRequest import recruitment_request_ns
 from .extensions import db, ma, api
 from flask_restx import namespace
 from flask_migrate import Migrate
-
+from .model import *
 
 
 def create_app(config_file="config.py"):

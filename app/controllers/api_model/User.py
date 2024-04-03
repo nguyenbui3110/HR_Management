@@ -2,16 +2,16 @@ from flask_restx import fields
 from app.extensions import api
 
 user_input_model = api.model('UserInput', {
-    "username": fields.String(required=True, description="The username"),
-    "password": fields.String(required=True, description="The password"),
-    "email": fields.String(required=True, description="The email"),
-    "role": fields.String(required=True, description="The role")
+    "Username": fields.String(required=True, description="The username"),
+    "Password": fields.String(required=True, description="The password"),
+    "Email": fields.String(required=True, description="The email"),
+    "Role": fields.String(required=True, description="The role")
     })
 user_model= api.model('User', {
-    "id": fields.Integer(required=True, description="The user ID"),
-    "username": fields.String(required=True, description="The username"),
-    "email": fields.String(required=True, description="The email"),
-    "role": fields.String(required=True, description="The role")
+    "Id": fields.Integer(required=True, description="The user ID"),
+    "Username": fields.String(required=True, description="The username"),
+    "Email": fields.String(required=True, description="The email"),
+    "Role": fields.String(required=True, description="The role")
     })
 login_model = api.model('Login', {
     "username": fields.String(required=True, description="The username"),

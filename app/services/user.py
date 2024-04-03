@@ -1,11 +1,11 @@
 from werkzeug.security import generate_password_hash
 from app.extensions import db
-from ..model.User import User
+from ..model import User
 
 class UserService:
 
     def login(username, password):
-        user=User.query.filter_by(username=username).first()
+        user=User.query.filter_by(Username=username).first()
         print(user)
         print(user.check_password(password))
         if user and user.check_password(password):
