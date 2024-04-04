@@ -1,5 +1,5 @@
 from enum import Enum
 
-class OfferStatusEnum(Enum):
+class OfferStatus(Enum):
     ISSUED = "Offer Issued"
     REJECTED = "offer Rejected"

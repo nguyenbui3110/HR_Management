@@ -19,7 +19,7 @@ class RecruitmentRequest(db.Model):
     AssigneeId = Column(Integer, db.ForeignKey('users.Id'))
     Assignee  = db.relationship('User', foreign_keys=[AssigneeId],back_populates='Assigns', lazy=True)
     Status = Column(String(50), nullable=True)#enum
-    RecruitmentProgressId = Column(String(50), nullable=True)
+    RecruitmentProgress = db.relationship('RecruitmentProgress', back_populates='RecruitmentRequest', lazy=True)
 
     def __init__(self, position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, hrId, status, recruitmentProgressId):
         self.position = position

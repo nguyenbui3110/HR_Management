@@ -1,6 +1,6 @@
 from enum import Enum
 
-class InterviewProgressEnum(Enum):
+class InterviewProgress(Enum):
     PASSED_1 = "Passed the first interview"
     FAIL_1 = "Failed the first interview"
     PASSED_2 = "Passed the second interview"

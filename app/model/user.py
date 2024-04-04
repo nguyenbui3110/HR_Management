@@ -18,6 +18,8 @@ class User(db.Model):
     Assigns = db.relationship('RecruitmentRequest', foreign_keys="[RecruitmentRequest.AssigneeId]", back_populates='Assignee', lazy=True)
     # Define CadidateInfos relationship 
     CadidateInfos = db.relationship('CadidateInfo', back_populates='Assignee', lazy=True)
+    # Define InterviewRecords relationship
+    InterviewRecords = db.relationship('InterviewRecord', back_populates='Intervewer', lazy=True)
 
     def __init__(self, username, email, password, role):
         self.Username = username
