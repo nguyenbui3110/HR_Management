@@ -10,7 +10,7 @@ class InterviewRecord(db.Model):
     InterviewDate = db.Column(Date)
     InterviewStage = db.Column(Enum(Stage))
     Result = db.Column(Enum(InterviewResult))
-    InterviewerId = db.Column(Integer)
+    InterviewerId = db.Column(Integer, db.ForeignKey('users.Id'))
     Intervewer = db.relationship('User', lazy=True, back_populates='InterviewRecords')
     InterviewRecord = db.Column(Text)
     InterviewEvaluation = db.Column(Text)

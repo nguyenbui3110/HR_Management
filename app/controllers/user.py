@@ -2,6 +2,8 @@ from flask import Flask
 from flask_restx import Api, Resource,Namespace
 from ..services.user import UserService
 from .api_model.User import user_input_model, user_model, login_model
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, current_user,get_jwt
+from datetime import datetime
 
 authorizations = {
     "jsonWebToken": {
@@ -17,7 +19,6 @@ auth_ns = Namespace('api/auth', description='Authentication operations', authori
 @auth_ns.route('/login')
 class Login(Resource):
     @auth_ns.expect(login_model)
-    @auth_ns.marshal_with(user_model)
     @auth_ns.response(200, 'Success')
     @auth_ns.response(401, 'Unauthorized')
     def post(self):
@@ -40,8 +41,22 @@ class Register(Resource):
     @auth_ns.response(400, 'Bad request')
     def post(self):
         # Implement your register logic here
-        username = auth_ns.payload['username']
-        password = auth_ns.payload['password']
-        email = auth_ns.payload['email']
-        role = auth_ns.payload['role']
+        username = auth_ns.payload['Username']
+        password = auth_ns.payload['Password']
+        email = auth_ns.payload['Email']
+        role = auth_ns.payload['Role']
         return UserService.create_account(username, password, email, role)
+@auth_ns.route('/test-current-user')
+@auth_ns.response(200, 'Success')
+@auth_ns.response(401, 'Unauthorized')
+@auth_ns.doc(security='jsonWebToken')
+class TestCurrentUser(Resource):
+    @jwt_required()
+    def get(self):
+        jwt=get_jwt()
+        print(jwt)
+        current_user = get_jwt_identity()
+        #print expiring time
+        print(current_user)
+
+        return {'current_user': current_user}, 200

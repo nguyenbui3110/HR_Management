@@ -33,6 +33,12 @@ class User(db.Model):
         return f"User(username='{self.Username}', email='{self.Email}', role='{self.Role}')"
     def __repr__(self):
         return f"<User(username='{self.Username}', email='{self.Email}', role='{self.Role}')"
+    def to_dict(self):
+        return {
+            'username': self.Username,
+            'email': self.Email,
+            'role': self.Role
+        }
 class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name', 'email', 'role')
