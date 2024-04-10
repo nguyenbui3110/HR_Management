@@ -35,6 +35,7 @@ class User(db.Model):
         return f"<User(username='{self.Username}', email='{self.Email}', role='{self.Role}')"
     def to_dict(self):
         return {
+            'id': self.Id,
             'username': self.Username,
             'email': self.Email,
             'role': self.Role

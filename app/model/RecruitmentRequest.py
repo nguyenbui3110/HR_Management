@@ -19,32 +19,31 @@ class RecruitmentRequest(db.Model):
     AssigneeId = Column(Integer, db.ForeignKey('users.Id'))
     Assignee  = db.relationship('User', foreign_keys=[AssigneeId],back_populates='Assigns', lazy=True)
     Status = Column(String(50), nullable=True)#enum
-    RecruitmentProgress = db.relationship('RecruitmentProgress', back_populates='RecruitmentRequest', lazy=True)
+    RecruitmentProgress = db.relationship("RecruitmentProgress", overlaps="RecruitmentProgress")
 
-    def __init__(self, position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, hrId, status, recruitmentProgressId):
-        self.position = position
-        self.jobDescription = jobDescription
-        self.city = city
-        self.department = department
-        self.recruitmentType = recruitmentType
-        self.jobDuties = jobDuties
-        self.requiredQualifications = requiredQualifications
-        self.salaryAndBenefit = salaryAndBenefit
-        self.expectedStartDate = expectedStartDate
-        self.headCount = headCount
-        self.requesterId = requesterId
-        self.hrId = hrId
-        self.status = status
-        self.recruitmentProgressId = recruitmentProgressId
+    def __init__(self, position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, AssigneeId, status):
+        self.Position = position
+        self.JobDescription = jobDescription
+        self.City = city
+        self.Department = department
+        self.RecruitmentType = recruitmentType
+        self.JobDuties = jobDuties
+        self.RequiredQualifications = requiredQualifications
+        self.SalaryAndBenefit = salaryAndBenefit
+        self.ExpectedStartDate = expectedStartDate
+        self.HeadCount = headCount
+        self.RequesterId = requesterId
+        self.AssigneeId = AssigneeId
+        self.Status = status
+
     def __str__(self):
-        return f"RecruitmentRequest(position='{self.position}', jobDescription='{self.jobDescription}', city='{self.city}', department='{self.department}', recruitmentType='{self.recruitmentType}', jobDuties='{self.jobDuties}', requiredQualifications='{self.requiredQualifications}', salaryAndBenefit='{self.salaryAndBenefit}', expectedStartDate='{self.expectedStartDate}', headCount='{self.headCount}', requesterId='{self.requesterId}', hrId='{self.hrId}', status='{self.status}', recruitmentProgressId='{self.recruitmentProgressId}')"
+        return f"RecruitmentRequest(Position='{self.Position}', JobDescription='{self.JobDescription}', City='{self.City}', Department='{self.Department}', RecruitmentType='{self.RecruitmentType}', JobDuties='{self.JobDuties}', RequiredQualifications='{self.RequiredQualifications}', SalaryAndBenefit='{self.SalaryAndBenefit}', ExpectedStartDate='{self.ExpectedStartDate}', HeadCount='{self.HeadCount}', RequesterId='{self.RequesterId}', AssigneeId='{self.AssigneeId}', Status='{self.Status}')"
     def __repr__(self):
-        return f"<RecruitmentRequest(position='{self.position}', jobDescription='{self.jobDescription}', city='{self.city}', department='{self.department}', recruitmentType='{self.recruitmentType}', jobDuties='{self.jobDuties}', requiredQualifications='{self.requiredQualifications}', salaryAndBenefit='{self.salaryAndBenefit}', expectedStartDate='{self.expectedStartDate}', headCount='{self.headCount}', requesterId='{self.requesterId}', hrId='{self.hrId}', status='{self.status}', recruitmentProgressId='{self.recruitmentProgressId}')"
-    
+        return f"<RecruitmentRequest(Position='{self.Position}', JobDescription='{self.JobDescription}', City='{self.City}', Department='{self.Department}', RecruitmentType='{self.RecruitmentType}', JobDuties='{self.JobDuties}', RequiredQualifications='{self.RequiredQualifications}', SalaryAndBenefit='{self.SalaryAndBenefit}', ExpectedStartDate='{self.ExpectedStartDate}', HeadCount='{self.HeadCount}', RequesterId='{self.RequesterId}', AssigneeId='{self.AssigneeId}', Status='{self.Status}')"
 
 class RecruitmentRequestSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'position', 'jobDescription', 'city', 'department', 'recruitmentType', 'jobDuties', 'requiredQualifications', 'salaryAndBenefit', 'expectedStartDate', 'headCount', 'requesterId', 'hrId', 'status', 'recruitmentProgressId')
+        fields = ('id', 'position', 'jobDescription', 'city', 'department', 'recruitmentType', 'jobDuties', 'requiredQualifications', 'salaryAndBenefit', 'expectedStartDate', 'headCount', 'requesterId', 'AssigneeId', 'status')
 recruitmentRequest_schema = RecruitmentRequestSchema()
 recruitmentRequests_schema = RecruitmentRequestSchema(many=True)
 

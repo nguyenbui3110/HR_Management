@@ -6,3 +6,5 @@ from .ProgressStatus import ProgressStatus
 from .ResumeEvaluation import ResumeEvaluation
 from .Stage import Stage
 from .InterviewResult import InterviewResult
+from .RecruitmentType import RecruitmentType
+from .RequestStatus import RequestStatus

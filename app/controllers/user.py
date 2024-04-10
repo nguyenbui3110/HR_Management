@@ -4,14 +4,8 @@ from ..services.user import UserService
 from .api_model.User import user_input_model, user_model, login_model
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, current_user,get_jwt
 from datetime import datetime
+from app.extensions import authorizations
 
-authorizations = {
-    "jsonWebToken": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization"
-    }
-}
 # Create a namespace for authentication
 auth_ns = Namespace('api/auth', description='Authentication operations', authorizations=authorizations)
 

@@ -10,7 +10,7 @@ class UserService:
         print(user)
         print(user.check_password(password))
         if user and user.check_password(password):
-            return {"access token":create_access_token(user.to_dict(),expires_delta=datetime.timedelta(days=1)),
+            return {"access token":create_access_token(user.to_dict(),expires_delta=datetime.timedelta(days=1),fresh=True),
                     "refresh token":create_refresh_token(user.to_dict())}, 200
         return{'message':'Invalid username or password'}, 401
 

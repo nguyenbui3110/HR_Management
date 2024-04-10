@@ -5,7 +5,7 @@ class RecruitmentProgress(db.Model):
     __tablename__ = 'recruitmentProgress'
     Id = Column(Integer, primary_key=True, autoincrement=True)
     RecruitmentRequestId = Column(Integer, db.ForeignKey('recruitmentRequest.Id'), nullable=True)
-    RecruitmentRequest = db.relationship('RecruitmentRequest', backref='recruitmentProgress', lazy=True)
+    RecruitmentRequest = db.relationship("RecruitmentRequest")
     Position = Column(String(50), nullable=True)
     NumberOfNewHire = Column(Integer, nullable=True)
     NewHires = Column(Text, nullable=True)

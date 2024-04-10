@@ -6,3 +6,10 @@ api = Api()
 db = SQLAlchemy()
 jwt=JWTManager()
 ma = Marshmallow()
+authorizations = {
+    "jsonWebToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+    }
+}
