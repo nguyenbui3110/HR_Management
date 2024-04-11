@@ -3,6 +3,7 @@ from app.extensions import db
 from ..model import User
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, current_user,create_refresh_token
 import datetime
+from flask import abort
 class UserService:
 
     def login(username, password):
@@ -26,11 +27,14 @@ class UserService:
     def create_account(username, password, email, role):
         # Hash the password before saving it
         hashed_password = generate_password_hash(password)
+        user = User.query.filter_by(Username=username).first()
+        if user:
+            abort(400, 'Username already exists')
         user = User(username, email, hashed_password, role)
         try:
             db.session.add(user)
             db.session.commit()
         except Exception as e:
-            return {'message': 'An error occurred while creating the user'}, 400
+            abort(500, str(e))
         return user
         

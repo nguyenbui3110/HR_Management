@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,abort
 from flask_restx import Api, Resource,Namespace
 from ..services.RecruitmentRequest import RecruitmentRequestService
 from .api_model.RecruitmentRequest import recruitment_request_model,recruitment_request_input_model
@@ -31,11 +31,23 @@ class RecruitmentRequest(Resource):
 
 @recruitment_request_ns.route('/<int:id>')
 class RecruitmentRequest(Resource):
+    @recruitment_request_ns.marshal_with(recruitment_request_model)
+    @recruitment_request_ns.doc(description='Get a recruitment request by ID')
+    @recruitment_request_ns.doc(security='jsonWebToken')
+    @jwt_required()
     def get(self, id):
-        return {'message': 'Get a recruitment request by ID'}
+        return RecruitmentRequestService.get_recruitmentRequest_by_id(id)
 
+    @recruitment_request_ns.marshal_with(recruitment_request_model)
+    @recruitment_request_ns.expect(recruitment_request_input_model)
+    @recruitment_request_ns.doc(description='Update a recruitment request by ID')
+    @recruitment_request_ns.doc(security='jsonWebToken')
+    @jwt_required()
     def put(self, id):
-        return {'message': 'Update a recruitment request by ID'}
-
+        return RecruitmentRequestService.update_recruitmentRequest(id, recruitment_request_ns.payload)
+    @recruitment_request_ns.doc(description='Delete a recruitment request by ID')
+    @recruitment_request_ns.doc(security='jsonWebToken')
+    @recruitment_request_ns.marshal_with(recruitment_request_model)
+    @jwt_required()
     def delete(self, id):
-        return {'message': 'Delete a recruitment request by ID'}
+        return RecruitmentRequestService.delete_recruitmentRequest(id)
