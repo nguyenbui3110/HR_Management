@@ -1,4 +1,5 @@
 step 1: py -m venv .venv <br>
+        .\.venv\Scripts\activate<br>
 step 2: pip install -r requirements.txt <br>
 step 3: create .env file and paste this <br>
         DATABASE_URL='Your-Database-URL' <br>
