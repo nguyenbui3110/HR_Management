@@ -26,11 +26,11 @@ class UserService:
     @staticmethod
     def create_account(username, password, email, role):
         # Hash the password before saving it
-        hashed_password = generate_password_hash(password)
+        # hashed_password = generate_password_hash(password)
         user = User.query.filter_by(Username=username).first()
         if user:
             abort(400, 'Username already exists')
-        user = User(username, email, hashed_password, role)
+        user = User(username, email, password, role)
         try:
             db.session.add(user)
             db.session.commit()

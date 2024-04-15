@@ -1,10 +1,14 @@
 from app.extensions import db
-from app.model import RecruitmentRequest, RecruitmentProgress
+from app.model import RecruitmentRequest, RecruitmentProgress,User
 from app.extensions import ma
 from flask_jwt_extended import jwt_required, get_jwt_identity,current_user
 from flask import abort
 
 
+def check_employee(Id):
+    employee = User.query.get(Id)
+    if employee is None:
+        abort(404,f'Employee has {Id} not found')
 class RecruitmentRequestService:
     def __init__(self):
         pass
@@ -23,14 +27,17 @@ class RecruitmentRequestService:
 
         return recruitmentRequests
 
-    def get_recruitmentRequest_by_id( id):
+    def get_recruitmentRequest_by_id(id):
         recruitmentRequest = RecruitmentRequest.query.get(id)
         if recruitmentRequest is None:
-            abort(404,'Recruitment Request {id} not found')
+            abort(404,f'Recruitment Request {id} not found')
         return recruitmentRequest
 
     def create_recruitmentRequest(payload):
+
         print(payload)
+        check_employee(payload['RequesterId'])
+        check_employee(payload['AssigneeId'])
         position = payload['Position']
         jobDescription = payload['JobDescription']
         city = payload['City']
@@ -44,7 +51,7 @@ class RecruitmentRequestService:
         
         current_user = get_jwt_identity()
         requesterId = current_user['id']
-        hrId = requesterId
+        hrId = payload['AssigneeId']
         status = payload['Status']
         recruitmentRequest = RecruitmentRequest(position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, hrId, status)
         db.session.add(recruitmentRequest)
@@ -55,7 +62,10 @@ class RecruitmentRequestService:
     def update_recruitmentRequest( id, recruitmentRequest):
         recruitmentRequest_to_update = RecruitmentRequest.query.get(id)
         if recruitmentRequest_to_update is None:
-            abort(404,'Recruitment Request {id} not found')
+            abort(404,f'Recruitment Request {id} not found')
+        check_employee(recruitmentRequest['RequesterId'])
+        check_employee(recruitmentRequest['AssigneeId'])
+        
         recruitmentRequest_to_update.Position = recruitmentRequest['Position']
         recruitmentRequest_to_update.JobDescription = recruitmentRequest['JobDescription']
         recruitmentRequest_to_update.City = recruitmentRequest['City']
@@ -67,19 +77,22 @@ class RecruitmentRequestService:
         recruitmentRequest_to_update.ExpectedStartDate = recruitmentRequest['ExpectedStartDate']
         recruitmentRequest_to_update.HeadCount = recruitmentRequest['HeadCount']
         recruitmentRequest_to_update.Status = recruitmentRequest['Status']
+        recruitmentRequest_to_update.RequesterId = recruitmentRequest['RequesterId']
+        recruitmentRequest_to_update.AssigneeId = recruitmentRequest['AssigneeId']
+        
         try:
             db.session.commit()
         except Exception as e:
-            abort(400,'An error occurred while updating the recruitment request {e}')
+            abort(400,f'An error occurred while updating the recruitment request {e}')
         return recruitmentRequest_to_update
 
     def delete_recruitmentRequest( id):
         recruitmentRequest = RecruitmentRequest.query.get(id)
         if recruitmentRequest is None:
-            abort(404, 'Recruitment Request {id} not found')
+            abort(404, f'Recruitment Request {id} not found')
         try:
             db.session.delete(recruitmentRequest)
             db.session.commit()
         except Exception as e:
-            abort(400,'An error occurred while deleting the recruitment request {e}')
+            abort(400,f'An error occurred while deleting the recruitment request {e}')
         return recruitmentRequest

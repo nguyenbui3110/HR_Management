@@ -12,6 +12,8 @@ recruitment_request_input_model = api.model('RecruitmentRequestInput', {
     "SalaryAndBenefit": fields.String(required=True, description="The salary and benefit"),
     "ExpectedStartDate": fields.Date(required=True, description="The expected start date"),
     "HeadCount": fields.Integer(required=True, description="The head count"),
+    'RequesterId': fields.Integer(description='ID of the requester'),
+    'AssigneeId': fields.Integer(description='ID of the assignee'),
     "Status": fields.String(enum=[e.value for e in RequestStatus],required=True, description="The status"),
     })
 recruitment_request_model = api.model('RecruitmentRequest', {
