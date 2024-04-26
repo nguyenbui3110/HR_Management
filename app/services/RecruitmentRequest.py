@@ -3,12 +3,9 @@ from app.model import RecruitmentRequest, RecruitmentProgress,User
 from app.extensions import ma
 from flask_jwt_extended import jwt_required, get_jwt_identity,current_user
 from flask import abort
+from app.utils import check_employee
 
 
-def check_employee(Id):
-    employee = User.query.get(Id)
-    if employee is None:
-        abort(404,f'Employee has {Id} not found')
 class RecruitmentRequestService:
     def __init__(self):
         pass
@@ -38,22 +35,22 @@ class RecruitmentRequestService:
         print(payload)
         check_employee(payload['RequesterId'])
         check_employee(payload['AssigneeId'])
-        position = payload['Position']
-        jobDescription = payload['JobDescription']
-        city = payload['City']
-        department = payload['Department']
-        recruitmentType = payload['RecruitmentType']
-        jobDuties = payload['JobDuties']
-        requiredQualifications = payload['RequiredQualifications']
-        salaryAndBenefit = payload['SalaryAndBenefit']
-        expectedStartDate = payload['ExpectedStartDate']
-        headCount = payload['HeadCount']
-        
         current_user = get_jwt_identity()
         requesterId = current_user['id']
         hrId = payload['AssigneeId']
-        status = payload['Status']
-        recruitmentRequest = RecruitmentRequest(position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, hrId, status)
+        recruitmentRequest = RecruitmentRequest(position=payload["Position"],
+                                        jobDescription=payload["JobDescription"],
+                                        city=payload["City"],
+                                        department=payload["Department"],
+                                        recruitmentType=payload["RecruitmentType"],
+                                        jobDuties=payload["JobDuties"],
+                                        requiredQualifications=payload["RequiredQualifications"],
+                                        salaryAndBenefit=payload["SalaryAndBenefit"],
+                                        expectedStartDate=payload["ExpectedStartDate"],
+                                        headCount=payload["HeadCount"],
+                                        requesterId=requesterId,
+                                        AssigneeId=hrId,
+                                        status=payload["Status"])
         db.session.add(recruitmentRequest)
         db.session.commit()
         return recruitmentRequest

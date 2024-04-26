@@ -2,6 +2,7 @@ from flask import Flask, request, Blueprint
 from .controllers.user import auth_ns
 from .controllers.RecruitmentRequest import recruitment_request_ns
 from .controllers.SeedData import SeedData_ns
+from .controllers.InterviewRecord import interview_record_ns
 from .extensions import db, ma, api, jwt
 from flask_restx import namespace
 from flask_migrate import Migrate
@@ -20,6 +21,7 @@ def create_app(config_file="config.py"):
     api.add_namespace(recruitment_request_ns)
     api.add_namespace(auth_ns)
     api.add_namespace(SeedData_ns)
+    api.add_namespace(interview_record_ns)
 
 
     
