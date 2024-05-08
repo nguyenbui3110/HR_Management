@@ -7,7 +7,9 @@ from app.services.InterviewRecord import InterviewRecordService
 from .api_model.InterviewRecord import interview_record_model,interview_record_input_model
 
 interview_record_ns = Namespace('api/interview_record', description='Interview Record operations', authorizations=authorizations)
-
+pagination_parser = interview_record_ns.parser()
+pagination_parser.add_argument('PageIndex', type=int, required=True, help='The page index')
+pagination_parser.add_argument('PageSize', type=int, required=True, help='The page size')
 @interview_record_ns.route('/')
 @interview_record_ns.response(200, 'Success')
 @interview_record_ns.response(400, 'Bad request')
@@ -18,11 +20,12 @@ interview_record_ns = Namespace('api/interview_record', description='Interview R
 class InterviewRecord(Resource):
     @interview_record_ns.doc(security='jsonWebToken')
     @interview_record_ns.marshal_list_with(interview_record_model)
-
+    @interview_record_ns.expect(pagination_parser)
     @interview_record_ns.doc(description='Get all interview records')
     @jwt_required()
     def get(self):
-        return InterviewRecordService.get_all_interviewRecords()
+        args = pagination_parser.parse_args()
+        return InterviewRecordService.get_all_interviewRecords(args)
     @interview_record_ns.expect(interview_record_input_model)
     @interview_record_ns.marshal_with(interview_record_model)
     @interview_record_ns.doc(security='jsonWebToken')

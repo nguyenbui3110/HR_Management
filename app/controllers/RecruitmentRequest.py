@@ -5,7 +5,9 @@ from .api_model.RecruitmentRequest import recruitment_request_model,recruitment_
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, current_user,get_jwt
 from app.extensions import authorizations
 recruitment_request_ns = Namespace('api/recruitment_request', description='Recruitment Request operations', authorizations=authorizations)
-
+pagination_parser = recruitment_request_ns.parser()
+pagination_parser.add_argument('PageIndex', type=int, required=True, help='The page index')
+pagination_parser.add_argument('PageSize', type=int, required=True, help='The page size')
 @recruitment_request_ns.route('/')
 @recruitment_request_ns.response(200, 'Success')
 @recruitment_request_ns.response(400, 'Bad request')
@@ -16,11 +18,12 @@ recruitment_request_ns = Namespace('api/recruitment_request', description='Recru
 class RecruitmentRequest(Resource):
     @recruitment_request_ns.doc(security='jsonWebToken')
     @recruitment_request_ns.marshal_list_with(recruitment_request_model)
-
     @recruitment_request_ns.doc(description='Get all recruitment requests')
+    @recruitment_request_ns.expect(pagination_parser)
     @jwt_required()
     def get(self):
-        return RecruitmentRequestService.get_all_recruitmentRequests()
+        args = pagination_parser.parse_args()
+        return RecruitmentRequestService.get_all_recruitmentRequests(args)
     @recruitment_request_ns.expect(recruitment_request_input_model)
     @recruitment_request_ns.marshal_with(recruitment_request_model)
     @recruitment_request_ns.doc(security='jsonWebToken')

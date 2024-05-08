@@ -38,8 +38,10 @@ def modify_1_record(record):
 class InterviewRecordService:
     def __init__(self):
         pass
-    def get_all_interviewRecords():
-        interviewRecords = InterviewRecord.query.all()
+    def get_all_interviewRecords(args):
+        pageIndex = args['PageIndex']
+        pageSize = args['PageSize']
+        interviewRecords = InterviewRecord.query.paginate(page=pageIndex,per_page=pageSize,error_out=False).items
         return modify_record(interviewRecords)
     
     def get_interviewRecord_by_id(id):
