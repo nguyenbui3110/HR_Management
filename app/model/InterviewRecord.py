@@ -5,12 +5,12 @@ from .Enums import *
 class InterviewRecord(db.Model):
     __tablename__ = 'interviewRecord'
     Id = db.Column(Integer, primary_key=True)
-    CandidateId = db.Column(Integer, db.ForeignKey('cadidateInfo.Id'))
+    CandidateId = db.Column(Integer, db.ForeignKey('cadidateInfo.Id', onupdate="CASCADE", ondelete="CASCADE"), nullable=True)
     Candidate = db.relationship('CadidateInfo', lazy=True, back_populates='InterviewRecords')
     InterviewDate = db.Column(Date)
     InterviewStage = db.Column(Enum(Stage))
     Result = db.Column(Enum(InterviewResult))
-    InterviewerId = db.Column(Integer, db.ForeignKey('users.Id'))
+    InterviewerId = db.Column(Integer, db.ForeignKey('users.Id', onupdate="CASCADE", ondelete="CASCADE"), nullable=True)
     Intervewer = db.relationship('User', lazy=True, back_populates='InterviewRecords')
     InterviewRecord = db.Column(Text)
     InterviewEvaluation = db.Column(Text)

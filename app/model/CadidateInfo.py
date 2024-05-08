@@ -8,7 +8,7 @@ class CadidateInfo(db.Model):
     __tablename__ = 'cadidateInfo'
     Id = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(255))
-    RecruitmentProgressId = db.Column(Integer, db.ForeignKey('recruitmentProgress.Id'), nullable=True)
+    RecruitmentProgressId = db.Column(Integer, db.ForeignKey('recruitmentProgress.Id', onupdate="CASCADE", ondelete="CASCADE"), nullable=True)
     RecruitmentProgress = db.relationship('RecruitmentProgress',back_populates='CadidateInfos', lazy=True)
 
     ResumeEvaluation = db.Column(Enum(ResumeEvaluation))#enum
@@ -17,6 +17,6 @@ class CadidateInfo(db.Model):
     HiringStatus = db.Column(Enum(HiringStatus))#enum
     SubmissionChannel = db.Column(Enum(SubmissionChannel))#enum
     Resume = db.Column(db.String(255))
-    AssigneeId = db.Column(Integer, db.ForeignKey('users.Id'), nullable=True)
+    AssigneeId = db.Column(Integer, db.ForeignKey('users.Id', onupdate="CASCADE", ondelete="CASCADE"), nullable=True)
     Assignee = db.relationship('User', lazy=True, back_populates='CadidateInfos')
     InterviewRecords = db.relationship('InterviewRecord', back_populates='Candidate', lazy=True)

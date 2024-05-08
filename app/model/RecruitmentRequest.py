@@ -14,9 +14,9 @@ class RecruitmentRequest(db.Model):
     SalaryAndBenefit = Column(Text, nullable=True)
     ExpectedStartDate = Column(Date, nullable=True)
     HeadCount = Column(Integer, nullable=True)
-    RequesterId = Column(Integer, db.ForeignKey('users.Id'))
+    RequesterId = Column(Integer, db.ForeignKey('users.Id', onupdate="CASCADE", ondelete="CASCADE"), nullable=True)
     Requester = db.relationship('User', foreign_keys=[RequesterId], back_populates='Requests', lazy=True)
-    AssigneeId = Column(Integer, db.ForeignKey('users.Id'))
+    AssigneeId = Column(Integer, db.ForeignKey('users.Id', onupdate="CASCADE", ondelete="CASCADE"), nullable=True)
     Assignee  = db.relationship('User', foreign_keys=[AssigneeId],back_populates='Assigns', lazy=True)
     Status = Column(String(50), nullable=True)#enum
     RecruitmentProgress = db.relationship("RecruitmentProgress", overlaps="RecruitmentProgress")

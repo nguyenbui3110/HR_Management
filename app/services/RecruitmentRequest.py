@@ -3,27 +3,21 @@ from app.model import RecruitmentRequest, RecruitmentProgress,User
 from app.extensions import ma
 from flask_jwt_extended import jwt_required, get_jwt_identity,current_user
 from flask import abort
+from app.utils import check_employee
 
 
-def check_employee(Id):
-    employee = User.query.get(Id)
-    if employee is None:
-        abort(404,f'Employee has {Id} not found')
 class RecruitmentRequestService:
     def __init__(self):
         pass
 
-    def get_all_recruitmentRequests():
-        recruitmentRequests = RecruitmentRequest.query.all()
-        #pagination
-        # page = request.args.get('page', 1, type=int)
-        # per_page = request.args.get('per_page', 10, type=int)
-        # recruitmentRequests = RecruitmentRequest.query.paginate(page, per_page, False)
-        # next_url = url_for('api.recruitment_request', page=recruitmentRequests.next_num) \
-        #     if recruitmentRequests.has_next else None
-        # prev_url = url_for('api.recruitment_request', page=recruitmentRequests.prev_num) \
-        #     if recruitmentRequests.has_prev else None
+    def get_all_recruitmentRequests(args):
 
+        pageIndex = args['PageIndex']
+        pageSize = args['PageSize']
+        print(pageSize)
+        print(pageIndex)
+        recruitmentRequests = RecruitmentRequest.query.paginate(page=pageIndex,per_page=pageSize,error_out=False).items
+        print(recruitmentRequests)
 
         return recruitmentRequests
 
@@ -38,22 +32,22 @@ class RecruitmentRequestService:
         print(payload)
         check_employee(payload['RequesterId'])
         check_employee(payload['AssigneeId'])
-        position = payload['Position']
-        jobDescription = payload['JobDescription']
-        city = payload['City']
-        department = payload['Department']
-        recruitmentType = payload['RecruitmentType']
-        jobDuties = payload['JobDuties']
-        requiredQualifications = payload['RequiredQualifications']
-        salaryAndBenefit = payload['SalaryAndBenefit']
-        expectedStartDate = payload['ExpectedStartDate']
-        headCount = payload['HeadCount']
-        
         current_user = get_jwt_identity()
         requesterId = current_user['id']
         hrId = payload['AssigneeId']
-        status = payload['Status']
-        recruitmentRequest = RecruitmentRequest(position, jobDescription, city, department, recruitmentType, jobDuties, requiredQualifications, salaryAndBenefit, expectedStartDate, headCount, requesterId, hrId, status)
+        recruitmentRequest = RecruitmentRequest(position=payload["Position"],
+                                        jobDescription=payload["JobDescription"],
+                                        city=payload["City"],
+                                        department=payload["Department"],
+                                        recruitmentType=payload["RecruitmentType"],
+                                        jobDuties=payload["JobDuties"],
+                                        requiredQualifications=payload["RequiredQualifications"],
+                                        salaryAndBenefit=payload["SalaryAndBenefit"],
+                                        expectedStartDate=payload["ExpectedStartDate"],
+                                        headCount=payload["HeadCount"],
+                                        requesterId=requesterId,
+                                        AssigneeId=hrId,
+                                        status=payload["Status"])
         db.session.add(recruitmentRequest)
         db.session.commit()
         return recruitmentRequest

@@ -8,6 +8,8 @@ class UserService:
 
     def login(username, password):
         user=User.query.filter_by(Username=username).first()
+        if user is None:
+            abort(401, 'Invalid username or password')
         print(user)
         print(user.check_password(password))
         if user and user.check_password(password):

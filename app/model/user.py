@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from app.extensions import db, ma
-from werkzeug.security import  check_password_hash
+from werkzeug.security import  check_password_hash,generate_password_hash
 # import jwt
 
 class User(db.Model):
@@ -12,19 +12,19 @@ class User(db.Model):
     Password = Column(String(255))
     Role = Column(String(50))
     # Define requests relationship with custom foreign key
-    Requests = db.relationship('RecruitmentRequest', foreign_keys="[RecruitmentRequest.RequesterId]", back_populates='Requester', lazy=True)
+    Requests = db.relationship('RecruitmentRequest', foreign_keys="[RecruitmentRequest.RequesterId]", back_populates='Requester', lazy=True, cascade="all, delete-orphan")
     
     # Define assigns relationship with custom foreign key
-    Assigns = db.relationship('RecruitmentRequest', foreign_keys="[RecruitmentRequest.AssigneeId]", back_populates='Assignee', lazy=True)
+    Assigns = db.relationship('RecruitmentRequest', foreign_keys="[RecruitmentRequest.AssigneeId]", back_populates='Assignee', lazy=True, cascade="all, delete-orphan")
     # Define CadidateInfos relationship 
-    CadidateInfos = db.relationship('CadidateInfo', back_populates='Assignee', lazy=True)
+    CadidateInfos = db.relationship('CadidateInfo', back_populates='Assignee', lazy=True, cascade="all, delete-orphan")
     # Define InterviewRecords relationship
-    InterviewRecords = db.relationship('InterviewRecord', back_populates='Intervewer', lazy=True)
+    InterviewRecords = db.relationship('InterviewRecord', back_populates='Intervewer', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, username, email, password, role):
         self.Username = username
         self.Email = email
-        self.Password = password
+        self.Password = generate_password_hash(password)
         self.Role = role   
     def check_password(self, password):
         return check_password_hash(self.Password, password)
